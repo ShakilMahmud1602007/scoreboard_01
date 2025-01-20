@@ -1,13 +1,13 @@
 {
     "teamA": {
         "name": "Team A",
-        "score": "180",
+        "score": "170",
         "overs": "14",
-        "target": 150
+        "target": 171
     },
     "teamB": {
         "name": "Team B",
-        "score": 80,
-        "overs": 8.2
+        "score": 90,
+        "overs": 9
     }
 }
