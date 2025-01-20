@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Scoreboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            text-align: center;
+            padding: 20px;
+        }
+        .scoreboard-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .scoreboard {
+            width: 300px;
+            background-color: #ffffff;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .team {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .score {
+            font-size: 36px;
+            color: #007bff;
+        }
+        .details, .remaining {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+    <script>
+        async function loadScoreboardData() {
+            try {
+                // Fetch data from the external JSON file
+                const response = await fetch('scoreboard.json');
+                const data = await response.json();
+
+                // Populate Team A's details
+                document.getElementById('teamA-name').textContent = data.teamA.name;
+                document.getElementById('teamA-score').textContent = data.teamA.score;
+                document.getElementById('teamA-overs').textContent = `Overs: ${data.teamA.overs}`;
+
+                // Populate Team B's details
+                document.getElementById('teamB-name').textContent = data.teamB.name;
+                document.getElementById('teamB-score').textContent = data.teamB.score;
+                document.getElementById('teamB-overs').textContent = `Overs: ${data.teamB.overs}`;
+
+                // Calculate remaining runs and balls
+                const totalOvers = 14;
+                const ballsPerOver = 6;
+                const totalBalls = totalOvers * ballsPerOver;
+
+                const teamBRunsNeeded = data.teamA.target - data.teamB.score;
+                const ballsBowled = Math.floor(data.teamB.overs) * ballsPerOver + parseInt(data.teamB.overs.toString().split('.')[1] || 0);
+                const ballsRemaining = totalBalls - ballsBowled;
+
+                document.getElementById('remaining').textContent = `${teamBRunsNeeded} runs needed in ${ballsRemaining} balls`;
+            } catch (error) {
+                console.error('Error loading scoreboard data:', error);
+            }
+        }
+
+        // Call the function on page load
+        window.onload = loadScoreboardData;
+    </script>
+</head>
+<body>
+    <h1>Cricket Scoreboard</h1>
+    <div class="scoreboard-container">
+        <!-- Team A Scoreboard -->
+        <div class="scoreboard">
+            <div class="team" id="teamA-name"></div>
+            <div class="score" id="teamA-score"></div>
+            <div class="details" id="teamA-overs"></div>
+        </div>
+        <!-- Team B Scoreboard -->
+        <div class="scoreboard">
+            <div class="team" id="teamB-name"></div>
+            <div class="score" id="teamB-score"></div>
+            <div class="details" id="teamB-overs"></div>
+            <div class="remaining" id="remaining"></div>
+        </div>
+    </div>
+</body>
+</html>
